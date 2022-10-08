@@ -1,0 +1,15 @@
+# ninja log v5
+1	733	6869267139772270	CMakeFiles/LinearAlgebra.dir/main.cpp.obj	7aeb0b5d495c671d
+735	914	6869267141538468	LinearAlgebra.exe	5ef9dc64d27140d7
+27	1059	6869313211341209	CMakeFiles/LinearAlgebra.dir/main.cpp.obj	7aeb0b5d495c671d
+1059	1349	6869313214211199	LinearAlgebra.exe	5ef9dc64d27140d7
+16	977	6869362289887572	CMakeFiles/LinearAlgebra.dir/main.cpp.obj	7aeb0b5d495c671d
+977	1275	6869362292810982	LinearAlgebra.exe	5ef9dc64d27140d7
+13	986	6869368136702146	CMakeFiles/LinearAlgebra.dir/main.cpp.obj	7aeb0b5d495c671d
+986	1282	6869368139642981	LinearAlgebra.exe	5ef9dc64d27140d7
+7	1113	6869376666935028	CMakeFiles/LinearAlgebra.dir/main.cpp.obj	7aeb0b5d495c671d
+1113	1391	6869376669687502	LinearAlgebra.exe	5ef9dc64d27140d7
+3	1473	6869386347838143	CMakeFiles/LinearAlgebra.dir/main.cpp.obj	7aeb0b5d495c671d
+1474	1759	6869386350686577	LinearAlgebra.exe	5ef9dc64d27140d7
+6	937	6869389617589781	CMakeFiles/LinearAlgebra.dir/main.cpp.obj	7aeb0b5d495c671d
+938	1175	6869389619957877	LinearAlgebra.exe	5ef9dc64d27140d7
