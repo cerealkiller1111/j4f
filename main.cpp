@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include "./utility.hpp"
 
 using namespace std;
 
@@ -10,12 +11,12 @@ using namespace std;
 
 /** Place-holder declarations **/
 
-vector<vector<int>> add(vector<vector<int>>& m1, vector<vector<int>>& m2)
+vector<vector<float>> add(vector<vector<float>>& m1, vector<vector<float>>& m2)
 {
-	vector<vector<int>> res;
+	vector<vector<float>> res;
 	if (m1.size() != m2.size()) {cout << "Invalid input matrix" << endl; return res;}
 	
-	vector<int> foo;
+	vector<float> foo;
 	foo.reserve(m1[0].size());
 	
 	for (int i=0; i<m1.size(); i++)
@@ -31,12 +32,12 @@ vector<vector<int>> add(vector<vector<int>>& m1, vector<vector<int>>& m2)
 	return res;
 }
 
-vector<vector<int>> subtract(const vector<vector<int>>& m1, const vector<vector<int>>& m2)
+vector<vector<float>> subtract(const vector<vector<float>>& m1, const vector<vector<float>>& m2)
 {
-	vector<vector<int>> res;
+	vector<vector<float>> res;
 	if (m1.size() != m2.size()) {cout << "Invalid input matrix" << endl; return res;}
 	
-	vector<int> foo;
+	vector<float> foo;
 	foo.reserve(m1[0].size());
 	
 	for (int i=0; i<m1.size(); i++)
@@ -52,12 +53,12 @@ vector<vector<int>> subtract(const vector<vector<int>>& m1, const vector<vector<
 	return res;
 }
 
-vector<vector<int>> multiply(const vector<vector<int>>& m1, const vector<vector<int>>& m2)
+vector<vector<float>> multiply(const vector<vector<float>>& m1, const vector<vector<float>>& m2)
 {
-	vector<vector<int>> res;
+	vector<vector<float>> res;
 	if (m1[0].size() != m2.size()) {cout << "Invalid input matrix" << endl; return res;}
 	
-	vector<int> foo;
+	vector<float> foo;
 	int sum = 0;
 	
 	
@@ -80,29 +81,55 @@ vector<vector<int>> multiply(const vector<vector<int>>& m1, const vector<vector<
 	return res;
 }
 
-void transpose(vector<vector<int>>& mat)
+vector<vector<float>> scale(const float& scalar, const vector<vector<float>>& mat)
 {
-	if (mat.size() != mat[0].size()) {cout << "Invalid input matrix" << endl; return;}
+	vector<vector<float>> res;
+
+	for (int i=0;i<mat.size(); i++)
+	{
+		vector<float> foo;
+		for (int j=0; j<mat.size(); j++)
+		{
+			foo.push_back(mat[i][j] * scalar);
+		}
+		res.push_back(foo);
+		foo.clear();
+	}
+
+	return res;
+}
+
+vector<vector<float>> transpose(const vector<vector<float>>& mat)
+{
+	vector<vector<float>> res;
+	if (mat.size() != mat[0].size()) {cout << "Invalid input matrix" << endl; return res;}
 	
-	int memo[mat.size()][mat[0].size()] = {{0}};
-	
+	int memo[mat.size()][mat[0].size()];
+
 	for (int i=0; i<mat.size(); i++)
 	{
 		for (int j=0; j<mat[0].size(); j++)
 		{
-			if ((memo[i][j] == 0) && (i != j))
-			{
-				int foo = mat[j][i]; // swap
-				mat[j][i] = mat[i][j];
-				mat[i][j] = foo;
-				
-				memo[i][j] = memo[j][i] = 1; // mark as swapped
-			}
+			memo[i][j] = mat[j][i];	
 		}
 	}
+
+	// convert traditional array to 2d vector
+	for (int i=0; i<mat.size(); i++)
+	{
+		vector<float> foo;
+		for (int j=0; j<mat[0].size(); j++)
+		{
+			foo.push_back(memo[i][j]);
+		}
+		res.push_back(foo);
+		foo.clear();
+	}
+
+	return res;
 }
 
-void print(const vector<vector<int>>& mat)
+void print(const vector<vector<float>>& mat)
 {
 	for (int i=0; i<mat.size(); i++)
 	{
@@ -120,13 +147,13 @@ void print(const vector<vector<int>>& mat)
 	cout << "\n";
 }
 
-int det(const vector<vector<int>>& mat);
+float det(const vector<vector<float>>& mat);
 
-int minor(const vector<vector<int>>& mat, const int& row, const int& col)
+int minor(const vector<vector<float>>& mat, const int& row, const int& col)
 {
 	if (mat.size() != mat[0].size()) {cout << "Invalid input matrix" << endl; return 0;}
 	
-	vector<vector<int>> foo = mat; // make a copy of the original matrix
+	vector<vector<float>> foo = mat; // make a copy of the original matrix
 	foo.erase(foo.begin()+(row-1)); // delete row
 	for (int i=0; i<foo.size(); i++) //delete column
 	{
@@ -136,13 +163,13 @@ int minor(const vector<vector<int>>& mat, const int& row, const int& col)
 	return det(foo);
 }
 
-vector<vector<int>> signChart(const vector<vector<int>>& mat)
+vector<vector<float>> signChart(const vector<vector<float>>& mat)
 {
 	// sign chart tells you the co-factor of each element in the original matrix
-	vector<vector<int>> res;
+	vector<vector<float>> res;
 	if (mat.size() != mat[0].size()) {cout << "Invalid input matrix" << endl; return res;}
 	
-	vector<int> foo;
+	vector<float> foo;
 	for (int i=0; i<mat.size(); i++)
 	{
 		for (int j=0; j<mat[0].size(); j++)
@@ -156,14 +183,14 @@ vector<vector<int>> signChart(const vector<vector<int>>& mat)
 	return res;
 }
 
-int det(const vector<vector<int>>& mat)
+float det(const vector<vector<float>>& mat)
 {
 	if (mat.size() != mat[0].size()) {cout << "Invalid input matrix" << endl; return 0;} //ONLY SQUARE MATRIX HAS DETERMINANT
 	if (mat.size() == 2) {return mat[0][0]*mat[1][1] - mat[0][1]*mat[1][0];}
 	
 	// if matrix is larger than 2x2
-	vector<vector<int>> sc = signChart(mat);
-	int sum = 0;
+	vector<vector<float>> sc = signChart(mat);
+	float sum = 0;
 	for (int i=0; i<sc.size(); i++)
 	{
 		sum += (sc[i][1] * mat[i][1]);
@@ -172,13 +199,75 @@ int det(const vector<vector<int>>& mat)
 	return sum;
 }
 
-vector<vector<int>> identity(vector<vector<int>>& mat)
+vector<vector<float>> rowEchelonForm(vector<vector<float>>& mat)
 {
-	vector<vector<int>> res;
+	vector<vector<float>> res = mat; // make a copy
+	
+	for (int diagonal=0; diagonal<res.size()-1; diagonal++)
+	{
+		for (int row=diagonal+1; row<res.size(); row++)
+		{
+			float x = (-res[row][diagonal] / res[diagonal][diagonal]);
+
+			for (int col=diagonal; col<res[0].size(); col++)
+			{
+				res[row][col] += (x*res[diagonal][col]);
+			}
+		}
+	}
+
+	return res;
+}
+
+float det2(vector<vector<float>>& mat)
+{
+	vector<vector<float>> foo = rowEchelonForm(mat);
+	float product = 1;
+	
+	for (int i=0; i<foo.size(); i++)
+	{
+		product *= foo[i][i];
+	}
+
+	return product;
+}
+
+float matRank(vector<vector<float>>& mat)
+{
+	vector<vector<float>> foo = rowEchelonForm(mat);
+	int r = 0;
+
+	for (int i=0; i<foo.size(); i++)
+	{
+		bool isNonZero = 0;
+		for (int j=0; j<foo[0].size(); j++)
+		{
+			if (foo[i][j] != 0) {
+				isNonZero = 1;
+				break;
+			}
+		}
+		if (isNonZero) {r++;}
+	}
+
+	return r;
+}
+
+vector<vector<float>> inverse(const vector<vector<float>>& mat)
+{
+	return scale(1/det(mat), transpose(signChart(mat)));  
+	// return transpose(signChart(mat));
+	// return (det(mat));
+	
+}
+
+vector<vector<float>> identity(vector<vector<float>>& mat)
+{
+	vector<vector<float>> res;
 	res.reserve(mat.size());
 	if (mat.size() != mat[0].size()) {cout << "Invalid input matrix"; return res;}
 	
-	vector<int> foo(mat[0].size(), 0);
+	vector<float> foo(mat[0].size(), 0);
 	for (int i=0; i<mat.size(); i++)
 	{
 		res.push_back(foo);
@@ -190,7 +279,7 @@ vector<vector<int>> identity(vector<vector<int>>& mat)
 	return res;
 }
 
-int exist(const vector<vector<vector<int>>>& list, const int& index)
+int exist(const vector<vector<vector<float>>>& list, const int& index)
 {
 	if (index > list.size()-1)
 	{
@@ -201,7 +290,7 @@ int exist(const vector<vector<vector<int>>>& list, const int& index)
 	return 1;
 }
 
-void save(vector<vector<int>>& mat, vector<vector<vector<int>>>& list)
+void save(vector<vector<float>>& mat, vector<vector<vector<float>>>& list)
 {
 	if (mat.size() == 0) {return;}
 	cout << "Do you want to save matAns to the matrix list? (1) / (0): ";
@@ -216,8 +305,10 @@ void save(vector<vector<int>>& mat, vector<vector<vector<int>>>& list)
 
 int main()
 {
-	vector<vector<int>> mat1, mat2, mat3, mat4, mat5, mat6, mat7, mat8, mat9;
-	vector<vector<int>> matAns;
+	vector<vector<float>> mat1, mat2, mat3, mat4, mat5, mat6, mat7, mat8, mat9, matAns, tmpMat;
+	vector<float> tmpRow;
+	int flag = 1, foo, foo2;
+	char option;
 	
 	mat1 = {
 			{1, 1, 1, 1},
@@ -261,14 +352,10 @@ int main()
 			{1, 1, 1},
 			{1, 1, 1}
 	};
-	vector<vector<vector<int>>> M_list = {mat1, mat2, mat3, mat4, mat5, mat6, mat7};
-	int flag = 1, foo, foo2;
-	char option;
-	vector<int> tmpRow;
-	vector<vector<int>> tmpMat;
+	vector<vector<vector<float>>> M_list = {mat1, mat2, mat3, mat4, mat5, mat6, mat7};
 	
 	while (flag) {
-		cout << "Matrices operations: (n)ew matrix, (a)dd, (s)ubtract, (m)ultiply, (t)ranpose, (d)eterminant, (i)dentity, (p)rint" << endl << ">>> ";
+		cout << "Matrices operations: (n)ew matrix, (a)dd, (s)ubtract, (m)ultiply, (t)ranpose, (d)eterminant, (D)et2, (r)ank, (i)dentity, in(v)erse, (p)rint, sign (c)hart, row Ech(e)lon form" << endl << ">>> ";
 		scanf(" %c", & option);
 		
 		switch (option) {
@@ -288,6 +375,7 @@ int main()
 					tmpRow.clear();
 				}
 				M_list.push_back(tmpMat);
+				tmpMat.clear();
 				cout << " --> Matrix input successful\n";
 				print(M_list[M_list.size() - 1]);
 				break;
@@ -337,7 +425,6 @@ int main()
 				matAns = (subtract(M_list[foo2 - 1], M_list[foo - 1]));
 				print(matAns);
 				save(matAns, M_list);
-				
 				break;
 			
 			case 't':
@@ -346,8 +433,9 @@ int main()
 				if (!exist(M_list, foo - 1)) {
 					continue;
 				}
-				transpose(M_list[foo - 1]);
-				print(M_list[foo - 1]);
+				matAns = transpose(M_list[foo-1]);
+				print(matAns);
+				save(matAns, M_list);
 				break;
 			
 			case 'm':
@@ -376,6 +464,24 @@ int main()
 				cout << "det(mat" << foo << ") = " << det(M_list[foo - 1]) << endl;
 				break;
 			
+			case 'D':
+				cout << "Find the determinant2 of matrix >>> ";
+				scanf(" %d", & foo);
+				if (!exist(M_list, foo - 1)) {
+					continue;
+				}
+				cout << "det2(mat" << foo << ") = " << det2(M_list[foo - 1]) << endl;
+				break;
+
+			case 'r':
+				cout << "Find the rank of matrix >>> ";
+				scanf(" %d", & foo);
+				if (!exist(M_list, foo - 1)) {
+					continue;
+				}
+				cout << "rank(mat" << foo << ") = " << matRank(M_list[foo - 1]) << endl;
+				break;
+
 			case 'i':
 				cout << "Find identity matrix of matrix >>> ";
 				scanf(" %d", & foo);
@@ -387,6 +493,39 @@ int main()
 				save(matAns, M_list);
 				break;
 			
+			case 'v':
+			    cout << "Find the inversion of matrix >>> ";
+				scanf(" %d", & foo);
+				if (!exist(M_list, foo-1)) {
+					continue;
+				}
+				matAns = inverse(M_list[foo-1]);
+				print(matAns);
+				save(matAns, M_list);
+				break;
+
+			case 'c':
+				cout << "Find the signchart of matrix >>> ";
+				scanf(" %d", & foo);
+				if (!exist(M_list, foo-1)) {
+					continue;
+				}
+				matAns = signChart(M_list[foo-1]);
+				print(matAns);
+				save(matAns, M_list);
+				break;
+
+			case 'e':
+				cout << "Find the row Echelon form of matrix >>> ";
+				scanf(" %d", & foo);
+				if (!exist(M_list, foo-1)) {
+					continue;
+				}
+				matAns = rowEchelonForm(M_list[foo-1]);
+				print(matAns);
+				save(matAns, M_list);
+				break;
+
 			default:
 				cout << "\n --> Inavlid option : " << option << endl;
 				break;
