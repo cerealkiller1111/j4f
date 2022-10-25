@@ -199,7 +199,7 @@ float det(const vector<vector<float>>& mat)
 	return sum;
 }
 
-vector<vector<float>> rowEchelonForm(vector<vector<float>>& mat)
+vector<vector<float>> GaussianElimination(vector<vector<float>>& mat)
 {
 	vector<vector<float>> res = mat; // make a copy
 	
@@ -221,7 +221,7 @@ vector<vector<float>> rowEchelonForm(vector<vector<float>>& mat)
 
 float det2(vector<vector<float>>& mat)
 {
-	vector<vector<float>> foo = rowEchelonForm(mat);
+	vector<vector<float>> foo = GaussianElimination(mat);
 	float product = 1;
 	
 	for (int i=0; i<foo.size(); i++)
@@ -234,7 +234,7 @@ float det2(vector<vector<float>>& mat)
 
 float matRank(vector<vector<float>>& mat)
 {
-	vector<vector<float>> foo = rowEchelonForm(mat);
+	vector<vector<float>> foo = GaussianElimination(mat);
 	int r = 0;
 
 	for (int i=0; i<foo.size(); i++)
@@ -521,7 +521,7 @@ int main()
 				if (!exist(M_list, foo-1)) {
 					continue;
 				}
-				matAns = rowEchelonForm(M_list[foo-1]);
+				matAns = GaussianElimination(M_list[foo-1]);
 				print(matAns);
 				save(matAns, M_list);
 				break;
