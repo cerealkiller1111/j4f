@@ -355,7 +355,7 @@ int main()
 	vector<vector<vector<float>>> M_list = {mat1, mat2, mat3, mat4, mat5, mat6, mat7};
 	
 	while (flag) {
-		cout << "Matrices operations: (n)ew matrix, (a)dd, (s)ubtract, (m)ultiply, (t)ranpose, (d)eterminant, (D)et2, (r)ank, (i)dentity, in(v)erse, (p)rint, sign (c)hart, row Ech(e)lon form" << endl << ">>> ";
+		cout << "Matrices operations: (n)ew matrix, (a)dd, (s)ubtract, (m)ultiply, (t)ranpose, (d)eterminant, (D)et2, (r)ank, (i)dentity, in(v)erse, (p)rint, sign (c)hart, (g)aussian elimination" << endl << ">>> ";
 		scanf(" %c", & option);
 		
 		switch (option) {
@@ -515,8 +515,9 @@ int main()
 				save(matAns, M_list);
 				break;
 
-			case 'e':
-				cout << "Find the row Echelon form of matrix >>> ";
+			case 'G':
+			case 'g':
+				cout << "Perform Gaussian elimination method on matrix >>> ";
 				scanf(" %d", & foo);
 				if (!exist(M_list, foo-1)) {
 					continue;
